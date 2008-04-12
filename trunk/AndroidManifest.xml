@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.baturinsky.tabletop">
+    <application android:icon="@drawable/icon">
+    <!--
+	    <provider android:name="com.baturinsky.tabletop.persistance.Provider" android:authorities="com.baturinsky.tabletop" />
+	    -->
+        <activity android:name=".lobby.Intro" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".TabletopMain" android:label="Cards">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.baturinsky.tabletop.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".lobby.FileBrowser" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.baturinsky.tabletop.CREATE" />
+                <action android:name="com.baturinsky.tabletop.CONTINUE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".browser.PartyBrowser" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="com.baturinsky.tabletop.VIEW" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".browser.FieldsEdit" android:label="@string/fields_edit_title" android:theme="@android:style/Theme.Dialog">
+            <intent-filter>
+                <action android:name="com.baturinsky.tabletop.EDIT" />
+            </intent-filter>
+        </activity>
+
+    </application>
+</manifest> 

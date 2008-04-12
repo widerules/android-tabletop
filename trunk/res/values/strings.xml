@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tabletop</string>
+    <string name="content_references">
+Content, licensed under GPL:
+
+Knight piece in logo, chess pieces 
+Copyright (C) Elmar Bartel, Tim Mann 
+http://savannah.gnu.org/projects/xboard/ 
+     
+"Tux" card set
+Copyright (C) 1998 Oliver Xymoron oxymoron@waste.org
+http://www.waste.org/~oxymoron/cards/
+
+Wargame units and map
+Copyright (C) Battle for Wesnoth developers
+http://www.wesnoth.org/
+    
+    </string>
+    <string name="relative_layout_2_instructions">relative_layout_2_instructions</string>
+    <string name="ok">Done</string>
+    <string name="insert">Insert</string>
+    <string name="root">Select table</string>
+    <string name="query">Query</string>
+    <string name="cancel">Cancel</string>
+    <string name="relative_layout_cancel">cancel</string>
+    <string name="intro_title"><b>Tabletop</b>\nPlaying anywhere, with anyone, any way.</string>
+    
+    <string name="help_text">Hello <a href="foo">here link</a> <i>italic</i> http://google.com http://foo.bar </string>
+    
+    <string name="fields_edit_title">Editing fields</string>
+
+    <string name="table_layout_6_x">X</string>
+    <string name="table_layout_6_open">Open\u2026</string>
+    <string name="table_layout_6_open_shortcut">Ctrl-O</string>
+    <string name="table_layout_6_save">Save\u2026</string>
+    <string name="table_layout_6_save_shortcut">Ctrl-S</string>
+    <string name="table_layout_6_save_as">Save As\u2026</string>
+    <string name="table_layout_6_save_as_shortcut">Ctrl-Shift-S</string>
+    <string name="table_layout_6_import">Import\u2026</string>
+    <string name="table_layout_6_export">Export\u2026</string>
+    <string name="table_layout_6_export_shortcut">Ctrl-E</string>
+    <string name="table_layout_6_quit">Quit\u2026</string>
+
+		<string name="dir_create_confirm">Create a new directory %s</string>
+		<string name="dir_delete_confirm">Delete directory or file %s</string>
+		<string name="type_dir_name">Type new directory name in field at the bottom of screen</string>
+		<string name="cant_delete_file">Can't delete file.</string>
+		
+		<string name="dir_create">Create new directory</string>
+		<string name="dir_change">Change directory</string>
+		<string name="delete">Delete</string>
+		<string name="filter">Show right format</string>
+		<string name="no_filter">Show all</string>
+		<string name="file_not_selected">No files selected. Choose file from list or type file name in a field.</string>
+		<string name="PartyDBInit">
+CREATE TABLE links (_id INTEGER PRIMARY KEY, sup INTEGER, sub INTEGER);
+CREATE TABLE notes (_id INTEGER PRIMARY KEY, value STRING);
+CREATE INDEX links_sup on links (sup);
+CREATE INDEX links_sub on links (sub);
+CREATE INDEX notes_value on notes (value);
+CREATE VIEW [nameds] AS SELECT sub AS _id, name, value FROM subs INNER JOIN names WHERE names._id = sup;
+CREATE VIEW names AS SELECT sub AS _id, value AS name FROM subs WHERE sup=-2;
+CREATE VIEW subs AS SELECT sub, value, sup FROM notes INNER JOIN links ON sub=notes._id;		
+		</string>
+		
+</resources>

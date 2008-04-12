@@ -1,0 +1,52 @@
+BEGIN;
+
+CREATE TABLE links (_id INTEGER PRIMARY KEY, sup INTEGER, sub INTEGER);
+
+CREATE TABLE notes (_id INTEGER PRIMARY KEY, value STRING);
+
+CREATE INDEX links_sup on links (sup);
+
+CREATE INDEX links_sub on links (sub);
+
+CREATE UNIQUE INDEX [links_sub_sup] ON [links](
+[sup]  ASC,
+[sub]  ASC
+);
+
+CREATE INDEX notes_value on notes (value);
+
+CREATE VIEW subs AS SELECT sub, value, sup FROM notes INNER JOIN links ON sub=notes._id;
+
+CREATE VIEW names AS SELECT sub AS _id, value AS name FROM subs WHERE sup=-2;
+
+CREATE VIEW [named] AS
+SELECT sub AS _id, name as name, value as value FROM subs INNER JOIN names WHERE names._id = sup;
+
+CREATE TRIGGER [insert_named]
+INSTEAD OF INSERT ON [named]
+FOR EACH ROW
+BEGIN
+
+INSERT INTO names (name) SELECT new.name AS name;
+
+INSERT OR REPLACE INTO notes
+VALUES((SELECT _id FROM named WHERE name = new.name), new.value);
+
+INSERT OR IGNORE INTO links (sup, sub) VALUES (
+(SELECT _id FROM names WHERE name = new.name), last_insert_rowid());
+
+END;
+
+CREATE TRIGGER [insert_names]
+INSTEAD OF INSERT ON [names]
+FOR EACH ROW
+BEGIN
+
+INSERT INTO notes (value) SELECT new.name AS value
+WHERE (SELECT COUNT(*) FROM names where name=new.name) = 0;
+
+INSERT OR IGNORE INTO links (sup, sub) SELECT -2 AS sup, last_insert_rowid() AS sub;
+
+INSERT INTO notes VALUES (100000000000, "");
+
+END;
