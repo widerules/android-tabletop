@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<props xmlns="http://com.baturinsky.tabletop" id="cards">
+	<zip file="raw:card_images" width="73" height="97"/>
+	<deck id="32" face="07c~13s;01c~01s" back="back1"/>
+	<deck id="36" face="06c~13s;01c~01s" back="back1"/>
+	<deck id="52" face="02c~13s;01c~01s" back="back1"/>
+	<deck id="all" face="02c~13s;01c~01s;j*2" back="back1"/>
+	<position id="game1">
+		<deck id="5cards" x="100" y="100">
+			<copy of="cards.all.01c"/>
+			<copy of="cards.all.02c"/>
+			<copy of="cards.all.03c"/>
+			<copy of="cards.all.04c"/>
+		</deck>
+	</position>	
+</props>

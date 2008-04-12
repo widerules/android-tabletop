@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Poker">
+			  <item name="android:background">@drawable/office_green</item>
+        <item name="android:textColor">@drawable/metallic_gold</item>
+        <item name="android:textColorHighlight">@drawable/white</item>
+        <item name="android:textSize">18sp</item>
+		    <item name="android:colorForeground">#fff</item>
+		    <item name="android:listSelector">@drawable/red</item>
+    </style>
+    <style name="Button">
+			<item name="android:background">@drawable/buttonsel</item>
+			<item name="android:textSize">18sp</item>
+			<item name="android:layout_height">10mm</item>
+			<item name="android:layout_width">wrap_content</item>
+			<item name="android:paddingLeft">3mm</item>
+			<item name="android:paddingRight">3mm</item>
+		</style>
+
+</resources>

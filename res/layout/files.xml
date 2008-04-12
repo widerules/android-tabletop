@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:stretchColumns="1"	
+	style="@style/Poker"
+>    	        
+	<Button	    	
+		android:id="@+id/ok"
+		android:text="@string/ok" 
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"
+		style="@style/Button"
+		/>
+	    
+	<Button
+	  android:id="@+id/cancel"
+	  android:text="@string/cancel" 
+	  android:layout_alignParentBottom="true"
+	  android:layout_toLeft="@id/ok"
+	  style="@style/Button"
+	  />
+	
+	<AutoCompleteTextView
+	  android:id="@+id/file_name"
+	  android:layout_alignParentLeft="true"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_above="@id/ok"
+	  android:textSize="24sp"
+	  android:nextFocusLeft="@+id/file_list"
+	  />
+	
+	<ListView
+		android:id="@+id/file_list"
+	  android:layout_width="fill_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_alignParentTop="true"
+	  android:layout_above="@id/file_name"
+	  android:textSize="24sp"
+	  android:nextFocusRight="@id/file_name"
+	  android:listSelector="@drawable/pale"
+	  />
+
+</RelativeLayout>
