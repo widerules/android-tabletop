@@ -7,28 +7,30 @@ import android.database.sqlite.SQLiteStatement;
 
 public class DbListener implements PartyListener {
 	SQLiteDatabase db;
-	SQLiteStatement sql, sqlLink;
+	SQLiteStatement sqlLink, sqlDelete, sqlUnlink, sqlWrite, sqlWriteNamed;
 	boolean transactionOpened = false;
 	
 	public DbListener (SQLiteDatabase db){
 		this.db = db;
-		sqlLink = db.compileStatement("INSERT INTO links (sup, sub) VALUES ?, ? ");
+		sqlLink = db.compileStatement("REPLACE INTO links (sup, sub) VALUES (?, ?) ");
+		sqlUnlink = db.compileStatement("DELETE FROM links WHERE sup = ? and sub = ?");
+		sqlDelete = db.compileStatement("DELETE FROM notes WHERE _id = ?");
+		sqlWrite = db.compileStatement("REPLACE INTO notes (_id, value) VALUES (?, ?)");
+		sqlWriteNamed = db.compileStatement("INSERT INTO named (name, value) VALUES (?, ?)");
 	}
-
+		
 	@Override
-	public void erace(long id) {
+	public void delete(long id) {
 		if(!transactionOpened)
 			begin();
-		sql = db.compileStatement("DELETE FROM users where _id = ?");
-		sql.bindLong(1, id);
-		sql.execute();
+		sqlDelete.bindLong(1, id);
+		sqlDelete.execute();
 	}
 
 	@Override
 	public void link(long sup, long sub) {
 		if(!transactionOpened)
 			begin();
-		sqlLink = db.compileStatement("INSERT INTO links (sup, sub) VALUES ?, ? ");
 		sqlLink.bindLong(1, sup);
 		sqlLink.bindLong(2, sub);
 		sqlLink.execute();
@@ -38,20 +40,18 @@ public class DbListener implements PartyListener {
 	public void unlink(long sup, long sub) {
 		if(!transactionOpened)
 			begin();
-		sql = db.compileStatement("DELETE FROM links where sup = ? and sub = ?");
-		sql.bindLong(1, sup);
-		sql.bindLong(2, sub);
-		sql.execute();
+		sqlUnlink.bindLong(1, sup);
+		sqlUnlink.bindLong(2, sub);
+		sqlUnlink.execute();
 	}
 
 	@Override
 	public void write(long id, String val) {
 		if(!transactionOpened)
 			begin();
-		sql = db.compileStatement("REPLACE INTO notes (_id, val) VALUES ?, ?");
-		sql.bindLong(1, id);
-		sql.bindString(2, val);
-		sql.execute();
+		sqlWrite.bindLong(1, id);
+		sqlWrite.bindString(2, val==null?"":val);
+		sqlWrite.execute();
 		
 	}
 
@@ -78,10 +78,9 @@ public class DbListener implements PartyListener {
 	}
 
 	@Override
-	public void write_named(String name, String val) {
-		sql = db.compileStatement("INSERT into nameds (name, val) VALUES ?, ?");
-		sql.bindString(1, name);
-		sql.bindString(2, val);
-		sql.execute();
+	public void write_named(String name, String val) {		
+		sqlWriteNamed.bindString(1, name);
+		sqlWriteNamed.bindString(2, val);
+		sqlWriteNamed.execute();
 	}
 }

@@ -24,8 +24,8 @@ public class Accessory {
 
 	private TreeMap<String, Accessory> subs;
 	private ArrayList<Accessory> order;
-	private TreeMap<String, Attr> attrs = null;
-
+	private TreeMap<String, Attr> attrs = new TreeMap<String, Attr>();
+	
 	TreeMap<String, Attr> attrs(){
 		return attrs;
 	}
@@ -87,8 +87,6 @@ public class Accessory {
 	}
 
 	void interpretId() {
-		if (attrs == null)
-			return;
 		String aid = get("name");
 		if (aid != null)
 			this.name = aid;
@@ -109,7 +107,7 @@ public class Accessory {
 
 	final Accessory into(Accessory to) {
 		if(to == sup)
-			return null;
+			return this;
 		
 		if (to != null && to.name() == null && to.sup() != null)
 			return into(to.sup());
@@ -122,7 +120,7 @@ public class Accessory {
 			return this;
 		
 		sup = to;
-		interpretAttributes();
+		//interpretAttributes();
 		to.addToMap(this);
 		to.order().add(this);
 		notifyChildMoved(this, from, to); //tell to new sup
@@ -130,15 +128,11 @@ public class Accessory {
 	}
 
 	private String get_here(String name) {
-		if (attrs == null)
-			return null;
 		Attr a = attrs.get(name);
-		return a==null?null:a.val;
+		return a==null?null:a.value;
 	}
 
 	void changeAttribute(String name, String value) {
-		if (attrs == null)
-			attrs = new TreeMap<String, Attr>();
 		Attr a = attrs.get(name);
 		String old;
 		if(a == null)
@@ -149,8 +143,8 @@ public class Accessory {
 				attrs.put(name, a);
 			}
 		} else {
-			old = a.val;
-			a.val = value;
+			old = a.value;
+			a.value = value;
 		}
 		notifyChildAttributeChanged(this, a, old, value);		
 		if(value == null){
@@ -314,17 +308,36 @@ public class Accessory {
 		return sb.toString();
 	}
 
-	Accessory copy() {
-		return new Accessory().copy(this);
+	Accessory construct(){
+		return new Accessory();
 	}
-
+	
+	final Accessory copyTo(Accessory to) {
+		Accessory a = construct();
+		a.into(to);
+		a.copy(this);
+		return a;
+	}	
+	
 	final Accessory copy(Accessory proto) {
 		addAttributes(proto.attrs);
 		interpretId();
 		for (Accessory a : proto.order())
-			a.copy().into(this);
+		{
+			a.copyTo(this);
+		}
 		return this;
 	}
+	
+	Accessory interpretModel() {
+		interpretId();
+		for (Accessory a : order())
+		{
+			a.interpretModel();
+		}
+		return this;
+	}
+
 
 	final String fullName() {
 		String s = name() == null?"nameless":name();
@@ -345,6 +358,11 @@ public class Accessory {
 		return l;
 	}
 
+	Accessory readXmlAttributeName(Attributes a) {
+		name = a.getValue("name");
+		return this;
+	}
+
 	Accessory readXmlAttributes(Attributes a) {
 		if (a != null) {
 			if (attrs == null)
@@ -360,30 +378,11 @@ public class Accessory {
 		return this;
 	}
 
-	Accessory addAttributes(TreeMap<String, Attr> a) {
-		if (a != null) {
-			TreeMap<String, Attr> old = attrs;
-			attrs = new TreeMap<String, Attr>(a);
-			if (old != null)
-				attrs.putAll(old);
+	Accessory addAttributes(TreeMap<String, Attr> as) {
+		for(Attr a:as.values()){
+			if(!attrs.containsKey(a.name))
+				changeAttribute(a.name, a.value);
 		}
-		return this;
-	}
-
-	Accessory interpretAttributes() {
-		interpretId();
-		return this;
-	}
-
-	Accessory into(Accessory sup, TreeMap<String, Attr> attr) {
-		addAttributes(attr);
-		into(sup);
-		return this;
-	}
-
-	Accessory read(Accessory sup, Attributes attr) {
-		readXmlAttributes(attr);
-		into(sup);
 		return this;
 	}
 
@@ -404,7 +403,7 @@ public class Accessory {
 		for (Accessory of : r) {
 			if (!(of instanceof Visible))
 				continue;
-			Visible a = (Visible) of.copy();
+			Visible a = (Visible) of.copyTo(this);
 			float[] p = new float[3];
 			for (int x = 0; x < 3; x++) {
 				p[x] = xrange[x][0]
@@ -412,7 +411,6 @@ public class Accessory {
 								/ (n - 1));
 			}
 			a.setPlace(p);
-			a.into(this);
 			i++;
 		}
 	}
@@ -425,11 +423,11 @@ public class Accessory {
 		Manager.Zip z = manager().getZip(zipName);
 		for (String pid : z.zipBitmaps.keySet()) {
 			Picture p = new Picture();
-			p.addAttributes(attrs);
 			p.changeAttribute("name", pid);
-			p.changeAttribute("file", zipName + "#" + pid);
-			p.interpretAttributes();
 			p.into(this);
+			p.addAttributes(attrs);
+			p.changeAttribute("file", zipName + "#" + pid);
+			p.interpretModel();			
 		}
 	}
 

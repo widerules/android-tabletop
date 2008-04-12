@@ -25,8 +25,8 @@ public class Grid extends Visible {
 	}
 
 	@Override
-	Accessory interpretAttributes() {
-		super.interpretAttributes();
+	Accessory interpretModel() {
+		super.interpretModel();
 		delta = new float[3][3];
 		for (int i = 0; i < 3; i++) {
 			String d1 = get("d_" + XNames[i]);
@@ -47,8 +47,8 @@ public class Grid extends Visible {
 	};
 
 	@Override
-	Accessory copy() {
-		return new Grid().copy(this);
+	Accessory construct(){
+		return new Grid();
 	}
 
 	Visible at(float[] at) {
@@ -67,6 +67,7 @@ public class Grid extends Visible {
 			at[i] = Math.round(at[i]);
 		Visible v = item.takeTo(this);		
 		v.setPlace(at);
+		v.interpretId();
 		// Log.i(TAG, v.toString());
 		return true;
 	}

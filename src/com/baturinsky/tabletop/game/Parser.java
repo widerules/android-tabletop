@@ -31,14 +31,21 @@ public class Parser extends DefaultHandler2
 			String of = attrs.getValue("of");
 			Accessory prototype = current.locate(of);
 			assert prototype != null: of + " not found";
-			a = prototype.copy();
+			a = prototype.copyTo(current);
 		} else	{
 			a = new Accessory();
 		}
 		
-		a.read(current, attrs);
+		a.readXmlAttributeName(attrs);
+		a.into(current);
+		a.readXmlAttributes(attrs);
+		
 		a.parseZip();
 		a.parseLine();
+		//TODO:Refactor
+		if(a instanceof Deck)
+			((Deck)a).parseCardList();
+				
 
 		if(root == null)
 			root = a;
@@ -48,7 +55,7 @@ public class Parser extends DefaultHandler2
 	    
     @Override
     public void endElement(String uri, String name, String qName){
-    	Log.i(TAG, current.order().size() + " items in " + current.fullName());
+    	Log.i(TAG, "Parserd " + qName + ", " + current.order().size() + " items in " + current.fullName());
     	current = current.sup();
     }
     

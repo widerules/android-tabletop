@@ -19,7 +19,7 @@ public class PartyListenerLog implements PartyListener{
 	}
 
 	@Override
-	public void erace(long id) {
+	public void delete(long id) {
 		Log.i(TAG, id + " RIP ");		
 	}
 

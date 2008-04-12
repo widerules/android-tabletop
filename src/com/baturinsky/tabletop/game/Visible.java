@@ -83,8 +83,8 @@ public class Visible extends Accessory {
 			flags = flags & ~flag;
 	}
 
-	Accessory interpretAttributes() {
-		super.interpretAttributes();
+	Accessory interpretModel() {
+		super.interpretModel();
 		for (int i = 0; i < 3; i++) {
 			if (has(XNames[i])) {
 				place[i] = getFloat(XNames[i]);
@@ -103,11 +103,6 @@ public class Visible extends Accessory {
 		}
 		calculateMatrix();
 		return this;
-	}
-
-	@Override
-	Accessory copy() {
-		return new Visible().copy(this);
 	}
 
 	public void setPlace(float[] place) {
@@ -167,12 +162,12 @@ public class Visible extends Accessory {
 		if (flag(COPIED)) {
 			if(to == null)
 				return null;
-			Visible v = (Visible) copy();
-			v.setFlag(COPIED, false);			
-			v.into(to);
+			Visible v = (Visible) copyTo(to);
+			v.setFlag(COPIED, false);
+			v.interpretModel();
 			return v;
 		} else {
-			into(to);
+			into(to).interpretModel();
 			return this;
 		}
 	}
@@ -188,7 +183,7 @@ public class Visible extends Accessory {
 			inv.invert(ctm);
 			inv.mapPoints(at);
 			Visible v = item.takeTo(this);			
-			v.setPlace(at);
+			v.setPlace(at);			
 		} else if (flag(REPLACED)) {
 			Visible v = item.takeTo(sup());			
 			v.setPlace(place());
@@ -242,6 +237,11 @@ public class Visible extends Accessory {
 		
 		childViewChanged(child);
 		super.childMoved(child, from, to);
+	}
+	
+	@Override
+	Accessory construct(){
+		return new Visible();
 	}
 	
 }

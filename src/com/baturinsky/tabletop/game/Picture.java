@@ -24,16 +24,16 @@ public class Picture extends Visible {
 	}
 
 	@Override
-	Accessory interpretAttributes() {
-		super.interpretAttributes();
+	Accessory interpretModel() {
+		super.interpretModel();
 		if (has("antialiased"))
 			antialiased = getBoolean("antialiased");
 		return this;
 	}
 
 	@Override
-	Accessory copy() {
-		return new Picture().copy(this);
+	Accessory construct(){
+		return new Picture();
 	}
 
 	void parseImage() {
