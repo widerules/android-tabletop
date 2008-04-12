@@ -11,16 +11,12 @@ public class Update implements PartyListener
 	
 	private static final char 
 	USER = '@', 
-	COME = '>',
-	LEAVE = '<',
-	SHOW = '!',
-	HIDE = '?',
-	WRITE = 'w',
-	ERACE = 'e',
+	WRITE = '*',
+	DELETE = ' ',
 	LINK = '=',
-	UNLINK = '~',
-	BEGIN = ':',
-	END = '\0';
+	UNLINK = '#',
+	BEGIN = '{',
+	END = '}';
 	
 	private static final long VERSION = 1;
 
@@ -72,8 +68,8 @@ public class Update implements PartyListener
 	}
 	
 	@Override
-	public void erace(long id){
-		data.putChar(ERACE);
+	public void delete(long id){
+		data.putChar(DELETE);
 		data.putLong(id);
 	}
 
@@ -111,7 +107,7 @@ public class Update implements PartyListener
 
 	void apply(PartyListener l)
 	{
-		long version, user, id;
+		long version, user;
 		char tag;
 		data.position(0);
 		version = data.getLong();
@@ -124,24 +120,11 @@ public class Update implements PartyListener
 		while(data.hasRemaining()){
 			tag = data.getChar();
 			switch(tag){
-			/*case COME:
-				l.come(data.getLong(), getString());
-				break;
-			case LEAVE:
-				id = data.getLong();
-				l.leave(id);
-				break;
-			case SHOW:
-				l.show(data.getLong(),data.getLong());
-				break;
-			case HIDE:
-				l.hide(data.getLong(), data.getLong());
-				break;*/
 			case WRITE:
 				l.write(data.getLong(), getString());
 				break;
-			case ERACE:
-				l.erace(data.getLong());
+			case DELETE:
+				l.delete(data.getLong());
 				break;
 			case LINK:
 				l.link(data.getLong(), data.getLong());
@@ -167,6 +150,6 @@ public class Update implements PartyListener
 
 	@Override
 	public void write_named(String name, String val) {
-		// TODO Auto-generated method stub		
+		// TODO: Do we need write_named here?		
 	}
 }

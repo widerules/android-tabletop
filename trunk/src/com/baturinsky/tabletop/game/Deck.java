@@ -26,7 +26,7 @@ public class Deck extends Visible {
 		setFlag(CONTAINER, true);
 	};
 	
-	private Deck parseCardList() {
+	Deck parseCardList() {
 		String faceRange = get("cards");				
 		
 		if (faceRange != null) {
@@ -38,7 +38,7 @@ public class Deck extends Visible {
 			for (Accessory face : r) {
 				if (face != null) {
 					if (back == null)
-						face.copy().into(this);
+						face.copyTo(this);
 					else
 						new Card().setFaceAndBack((Visible) face, back).into(this);
 				}
@@ -49,9 +49,8 @@ public class Deck extends Visible {
 	}
 
 	@Override
-	Accessory interpretAttributes() {
-		parseCardList();
-		super.interpretAttributes();		
+	Accessory interpretModel() {		
+		super.interpretModel();		
 		if (has("cardWidth"))
 			w = getInt("cardWidth");
 		if (has("cardHeight"))
@@ -165,8 +164,8 @@ public class Deck extends Visible {
 	}
 
 	@Override
-	Accessory copy() {
-		return new Deck().copy(this);
+	Accessory construct(){
+		return new Deck();
 	}
 
 	@Override
@@ -177,7 +176,7 @@ public class Deck extends Visible {
 	@Override
 	boolean drop(Visible item, float[] at) {
 		if (this != item) {
-			item.into(this);
+			item.into(this).interpretModel();
 			updateImage();
 		} else {
 			return false;

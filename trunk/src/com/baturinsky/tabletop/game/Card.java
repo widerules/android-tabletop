@@ -26,8 +26,8 @@ public class Card extends Visible {
 	}
 
 	@Override
-	Accessory copy() {
-		return new Card().copy(this);
+	Accessory construct(){
+		return new Card();
 	}
 
 }
