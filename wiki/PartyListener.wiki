@@ -1,0 +1,31 @@
+#summary Description of PartyListener interface
+
+{{{
+public interface PartyListener {
+	void user(long id);
+	void begin(long time);	
+	void write(long id, String val);
+	void delete(long id);
+	void link(long sup, long sub);
+	void unlink(long sup, long sub);
+	void end();
+
+}}}
+
+It is a main interface in engine. Currently it is used for logging, storing into db, serialization in and from string.
+
+It's commands do following:
+
+_void user(long id);_ - declares id of player that do following changes. Not used currently.
+
+_void begin(long time);_ - starts a transaction (one move, for example, or a real transation when writing into db) and marks time of it. Time is used for conflicts of concurrent moves.
+
+_void write(long id, String val);_ - changes value of notes and makes new note if it does not exist.
+
+_void delete(long id);_ - removes note from the game.
+
+_void link(long sup, long sub);_ - links two notes.
+
+_void unlink(long sup, long sub);_ - removes link.
+
+_void end();_ - finishes move or transaction.
