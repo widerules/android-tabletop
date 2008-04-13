@@ -1,0 +1,46 @@
+#summary Description of Tabletop Android game model
+
+= Introduction =
+
+Tabletop Android game model is designed in a spirit of microkernel. 
+
+It has very simple core, and everything else is built on top of it.
+
+= Kernel =
+
+There are only two entities at a heart of model - Note and Link;
+
+*Note* is a string and it's unique integer Id. String and an integer;
+
+*Link* is an oriented connection between two Notes. Two integer - ids of first and second notes; First note in a link is called "sup", second - "sub". Usually link denotes relations like "Sub is part of Sup" or "Sub is an instance of set Sup"
+
+Each game is a set of notes and links between them. Each move is  changing of some notes, and adding or removing some links.
+
+Such simple model leads to very simple interfaces.
+
+This is a main interface that is used in engine:
+
+{{{
+public interface PartyListener {
+	void user(long id);
+	void begin(long time);	
+	void write(long id, String val);
+	void delete(long id);
+	void link(long sup, long sub);
+	void unlink(long sup, long sub);
+	void end();
+}
+}}}
+
+See PartyListener description for details.
+
+Format of sqlite database is also very simple - onle two tables
+
+{{{
+CREATE TABLE links (_id INTEGER PRIMARY KEY, sup INTEGER, sub INTEGER);
+
+CREATE TABLE notes (_id INTEGER PRIMARY KEY, value STRING);
+}}}
+
+Everything else are indexes, views and triggers.
+
