@@ -1,0 +1,73 @@
+#summary Description and examples of game template format
+= Introduction =
+
+Let's describe it on an example of chess board:
+
+{{{
+
+<?xml version="1.0" encoding="utf-8"?>
+<props id="chess">
+	<zip zip_file="raw:chess_pieces" width="40" height="40" anchor_x="20" anchor_y="20"/>
+	<picture name="chess_board" file="raw:chessboard" width="320" height="320" aa="false"/>	
+	<position name="initial">
+		<deck name="whites" x="36" y="330" presentation="line" 
+			cards="white_queen;white_king;white_bishop;white_knight;white_rook;white_pawn" 
+			static="true" child_copied="true" child_hole="true"
+		/>
+		<deck name="blacks" x="36" y="380" presentation="line" 
+			cards="black_queen;black_king;black_bishop;black_knight;black_rook;black_pawn"
+			static="true" child_copied="true" child_hole="true" hole="true"
+		/>
+		<copy of="chess_board" static="true" z="-1"/>
+		<grid name="chessboard_grid" 
+			x="-20" y="300" 
+			d_x="40,0,0" d_y="0,-40,0" 
+			width="320" height="320"
+			anchor_x="-20" anchor_y="-20"
+			child_replaced="true"
+			static="true"
+		>
+			<line range_x="1~8" range_y="1"
+				line="white_rook;white_knight;white_bishop;white_queen;white_king;white_bishop;white_knight;white_rook"/>
+			<line range_x="1~8" range_y="2"
+				line="white_pawn*8"/>
+			<line range_x="1~8" range_y="7"
+				line="black_rook;black_knight;black_bishop;black_queen;black_king;black_bishop;black_knight;black_rook"/>
+			<line range_x="1~8" range_y="8"
+				line="black_pawn*8"/>
+		</grid>
+	</position>
+</props>
+
+}}}
+
+_<picture name="chess_board" file="raw:chessboard" width="320" height="320" aa="false"/>_
+
+Picture is a bitmap, that can be used, for example, to draw game pieces. 
+
+*name* - name of element, that can be used to reference to it. All game elements (engine call them "accesories") can have it.
+
+*file* - name of image file. It can be user file, file in "raw" directory in apk (then it should start with "raw:" prefix", or a file inside of zip - then it must be written in form of zip_name#file_inside_zip
+
+*width* , *height* - size of picture. If it differs from size of bitmap, then it will be stretched or shrinked accordingly.
+
+*aa* - flag of antialiasing.
+
+*anchor_x*, *anchor_y* - in usual meaning, i.e. picture will be drawn shifted by that values. Default anchor is in top left corner. As you see, chess_board uses default anchor.
+
+_<zip zip_file="raw:chess_pieces" width="40" height="40" anchor_x="20" anchor_y="20"/>_
+
+If you don't want to specify each picture in zip by hand, you can use this construction. It will parse all images in zip and register them by their names (without extention).
+
+_<position name="initial"> ... _
+Description of specific position and screen layout. This one describes starting chess position. If engine is said to load "chess.xml#initial" template, then it will load "chess.xml" file and set "initial" position.
+
+_<deck name="whites" x="36" y="330" presentation="line" 			cards="white_queen;white_king;white_bishop;white_knight;white_rook;white_pawn" 
+			static="true" child_copied="true" child_hole="true"
+		/>_
+
+Deck is a sequence of "cards". Card can be a picture, or two pictures - front and back.
+"cards" is a list of initialcards in deck in Range format.
+"static" means that deack itself is not active - it can't be selected, moved, etc. That is not extended on cards in it.
+ "child_copied" "child_hole" - if you want to set some default attribute for all children of element, you can do it with a "child_" prefix. "copied" flag means that card can't be taken from deck, but instead will produce a copy of itself. "hole" means that all pieces that is dropped on it will be removed from the game.
+"presentation" - deack can be shown in form of line, stack or fan. Currently only line presentation is fully functional.
