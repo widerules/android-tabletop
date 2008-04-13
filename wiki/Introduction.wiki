@@ -1,3 +1,5 @@
 #summary One-sentence summary of this page.
 
 Hmm, where can I add pictures here...
+
+http://android-tabletop.googlecode.com/files/Screenshot.png
