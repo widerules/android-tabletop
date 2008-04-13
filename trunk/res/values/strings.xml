@@ -15,7 +15,14 @@ http://www.waste.org/~oxymoron/cards/
 Wargame units and map
 Copyright (C) Battle for Wesnoth developers
 http://www.wesnoth.org/
-    
+
+Public domain:
+
+Draughts pieces
+(C) Xboard
+
+Chess board
+Original art    
     </string>
     <string name="relative_layout_2_instructions">relative_layout_2_instructions</string>
     <string name="ok">Done</string>
@@ -53,15 +60,13 @@ http://www.wesnoth.org/
 		<string name="filter">Show right format</string>
 		<string name="no_filter">Show all</string>
 		<string name="file_not_selected">No files selected. Choose file from list or type file name in a field.</string>
-		<string name="PartyDBInit">
-CREATE TABLE links (_id INTEGER PRIMARY KEY, sup INTEGER, sub INTEGER);
-CREATE TABLE notes (_id INTEGER PRIMARY KEY, value STRING);
-CREATE INDEX links_sup on links (sup);
-CREATE INDEX links_sub on links (sub);
-CREATE INDEX notes_value on notes (value);
-CREATE VIEW [nameds] AS SELECT sub AS _id, name, value FROM subs INNER JOIN names WHERE names._id = sup;
-CREATE VIEW names AS SELECT sub AS _id, value AS name FROM subs WHERE sup=-2;
-CREATE VIEW subs AS SELECT sub, value, sup FROM notes INNER JOIN links ON sub=notes._id;		
-		</string>
+		<string name="invite_friend">Invite friend (WIP)</string>
+		<string name="invite_friend_wip">With this option you will let remote player to join current game. In this version it is not yet implemented. Check http://code.google.com/p/android-tabletop/ for latest version.</string>
+		<string name="play_other_game">Play another game</string>
+		<string name="play_chess">Play chess</string>
+		<string name="play_draughts">Play draughts</string>
+		<string name="show_license">See license</string>
+		<string name="license">This application is licensed under GPL v3. You can download sources and see details on http://code.google.com/p/android-tabletop/</string>
+		
 		
 </resources>

@@ -7,9 +7,9 @@
 			cards="white_queen;white_king;white_bishop;white_knight;white_rook;white_pawn" 
 			static="true" child_copied="true" child_hole="true"
 		/>
-		<deck name="whites" x="36" y="380" presentation="line" 
+		<deck name="blacks" x="36" y="380" presentation="line" 
 			cards="black_queen;black_king;black_bishop;black_knight;black_rook;black_pawn"
-			static="true" child_copied="true" child_hole="true"
+			static="true" child_copied="true" child_hole="true" hole="true"
 		/>
 		<copy of="chess_board" static="true" z="-1"/>
 		<grid name="chessboard_grid" 

@@ -55,7 +55,7 @@ public class Parser extends DefaultHandler2
 	    
     @Override
     public void endElement(String uri, String name, String qName){
-    	Log.i(TAG, "Parserd " + qName + ", " + current.order().size() + " items in " + current.fullName());
+    	Log.i(TAG, "Parsed " + qName + ", " + current.order().size() + " items in " + current.fullName());
     	current = current.sup();
     }
     

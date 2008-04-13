@@ -59,9 +59,13 @@ public final class R {
         public static final int chess_pieces=0x7f040003;
         public static final int chessboard=0x7f040004;
         public static final int dbinit=0x7f040005;
+        public static final int dr_black=0x7f040006;
+        public static final int dr_black2=0x7f040007;
+        public static final int dr_white=0x7f040008;
+        public static final int dr_white2=0x7f040009;
+        public static final int draughts=0x7f04000a;
     }
     public static final class string {
-        public static final int PartyDBInit=0x7f060021;
         public static final int app_name=0x7f060000;
         public static final int cancel=0x7f060007;
         public static final int cant_delete_file=0x7f06001a;
@@ -77,12 +81,19 @@ public final class R {
         public static final int help_text=0x7f06000a;
         public static final int insert=0x7f060004;
         public static final int intro_title=0x7f060009;
+        public static final int invite_friend=0x7f060021;
+        public static final int invite_friend_wip=0x7f060022;
+        public static final int license=0x7f060027;
         public static final int no_filter=0x7f06001f;
         public static final int ok=0x7f060003;
+        public static final int play_chess=0x7f060024;
+        public static final int play_draughts=0x7f060025;
+        public static final int play_other_game=0x7f060023;
         public static final int query=0x7f060006;
         public static final int relative_layout_2_instructions=0x7f060002;
         public static final int relative_layout_cancel=0x7f060008;
         public static final int root=0x7f060005;
+        public static final int show_license=0x7f060026;
         public static final int table_layout_6_export=0x7f060014;
         public static final int table_layout_6_export_shortcut=0x7f060015;
         public static final int table_layout_6_import=0x7f060013;

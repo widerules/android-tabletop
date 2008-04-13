@@ -19,7 +19,9 @@ public class Picture extends Visible {
 		canvas.save();
 		canvas.concat(finalMatrix());
 		drawFocus(canvas);
-		image().draw(canvas);
+		Drawable img = image();
+		if(img != null)
+			image().draw(canvas);
 		canvas.restore();
 	}
 
@@ -65,7 +67,8 @@ public class Picture extends Visible {
 	Drawable image() {
 		if (image == null)
 			parseImage();
-		assert image != null : "Image " + get("file") + " not found";
+		//TODO: Find error and return assert
+		//assert image != null : "Image not found\n" + toString();
 		return image;
 	}
 

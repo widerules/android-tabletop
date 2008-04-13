@@ -16,9 +16,9 @@ public class Accessory {
 	final static String SNames[] = new String[] { "width", "height", "depth" };
 	final static String TAG = "accessory";
 
-	static int indCount = 1; //TODO:Should be taken from manager 
+	static long indCount = 1; //TODO:Should be taken from manager 
 
-	private int _id;
+	private long _id;
 	private String name;
 	private Accessory sup;
 
@@ -28,6 +28,18 @@ public class Accessory {
 	
 	TreeMap<String, Attr> attrs(){
 		return attrs;
+	}
+	
+	//Should be used only in deserialization
+	void setSup(Accessory sup){
+		this.sup = sup;
+	}
+	
+	//This too
+	void setId(long id){
+		_id = id;
+		if(indCount<=id)
+			indCount = id+1;
 	}
 	
 	static void putToRange(List<Accessory> r, Accessory a, int q) {
@@ -51,7 +63,7 @@ public class Accessory {
 		return name;
 	}
 	
-	int _id(){
+	long _id(){
 		return _id;
 	}
 
@@ -132,6 +144,11 @@ public class Accessory {
 		return a==null?null:a.value;
 	}
 
+	
+	void addAttribute(Attr attr) {
+		attrs.put(attr.name, attr);
+	}
+	
 	void changeAttribute(String name, String value) {
 		Attr a = attrs.get(name);
 		String old;
