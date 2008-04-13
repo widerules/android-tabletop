@@ -41,9 +41,11 @@ Let's describe it on an example of chess board:
 
 }}}
 
-{{{<picture name="chess_board" file="raw:chessboard" width="320" height="320" aa="false"/>}}}
+{{{
+<picture name="chess_board" file="raw:chessboard" width="320" height="320" aa="false"/>
+}}}
 
-Picture is a bitmap, that can be used, for example, to draw game pieces. 
+ * Picture is a bitmap, that can be used, for example, to draw game pieces. 
 
  * *name* - name of element, that can be used to reference to it. All game elements (engine call them "accesories") can have it.
 
@@ -55,29 +57,35 @@ Picture is a bitmap, that can be used, for example, to draw game pieces.
 
  * *anchor_x*, *anchor_y* - in usual meaning, i.e. picture will be drawn shifted by that values. Default anchor is in top left corner. As you see, chess_board uses default anchor.
 
-{{{<zip zip_file="raw:chess_pieces" width="40" height="40" anchor_x="20" anchor_y="20"/>}}}
+{{{
+<zip zip_file="raw:chess_pieces" width="40" height="40" anchor_x="20" anchor_y="20"/>
+}}}
 
  * If you don't want to specify each picture in zip by hand, you can use this construction. It will parse all images in zip and register them by their names (without extention).
 
-{{{<position name="initial"> ... }}}
+{{{
+<position name="initial"> ... 
+}}}
  * Description of specific position and screen layout. This one describes starting chess position. If engine is said to load "chess.xml#initial" template, then it will load "chess.xml" file and set "initial" position.
 
-{{{<deck name="whites" x="36" y="330" presentation="line" cards="white_queen;white_king;white_bishop;white_knight;white_rook;white_pawn" static="true" child_copied="true" child_hole="true"/> }}}
+{{{
+<deck name="whites" x="36" y="330" presentation="line" cards="white_queen;white_king;white_bishop;white_knight;white_rook;white_pawn" static="true" child_copied="true" child_hole="true"/> 
+}}}
 
-Deck is a sequence of "cards". Card can be a picture, or two pictures - front and back.
+ * Deck is a sequence of "cards". Card can be a picture, or two pictures - front and back.
  * *cards* is a list of initialcards in deck in Range format.
  * *static* means that deack itself is not active - it can't be selected, moved, etc. That is not extended on cards in it.
- * *child_copied* *child_hole* - if you want to set some default attribute for all children of element, you can do it with a *child_* prefix. *copied* flag means that card can't be taken from deck, but instead will produce a copy of itself. *hole* means that all pieces that is dropped on it will be removed from the game.
+ * *child_copied* *child_hole* - if you want to set some default attribute for all children of element, you can do it with a {{{*child_*}}} prefix. *copied* flag means that card can't be taken from deck, but instead will produce a copy of itself. *hole* means that all pieces that is dropped on it will be removed from the game.
  * *presentation* - deack can be shown in form of line, stack or fan. Currently only line presentation is fully functional.
 
 {{{
 <copy of="chess_board" static="true" z="-1"/>
 }}}
 
-This element means that engine should take some element from elsewhere (path is in "of" attribute), create a copy of it and, alter some attributes and place it to where it is.
-So, this one takes chess board picture, places it in default position and makes it *static* - not active.
+ * This element means that engine should take some element from elsewhere (path is in "of" attribute), create a copy of it and, alter some attributes and place it to where it is. So, this one takes chess board picture, places it in default position and makes it *static* - not active.
 
-{{{		<grid name="chessboard_grid" 
+{{{
+		<grid name="chessboard_grid" 
 			x="-20" y="300" 
 			d_x="40,0,0" d_y="0,-40,0" 
 			width="320" height="320"
@@ -86,18 +94,25 @@ So, this one takes chess board picture, places it in default position and makes 
 			static="true"
 		>
 }}}
-Very interesting element. Used for game boards. It changes coordinate system inside of it.
-*d_x* describes new "x" vector and *d_y* - new "y" vector. Also, each piece inside of grid should have an integer coordinates (i.e. placed in the center of some cell). So, this particular board has square cells with side of 40, y grows when moving down-up (as it is customary for chess notation).
-*replaced* means that each piece inside it will be removed, when other piece is placed on it. this grid sets this flag for all it's shildren.
+
+ * Very interesting element. Used for game boards. It changes coordinate system inside of it. 
+ * *d_x* describes new "x" vector and *d_y* - new "y" vector. Also, each piece inside of grid should have an integer coordinates (i.e. placed in the center of some cell). So, this particular board has square cells with side of 40, y grows when moving down-up (as it is customary for chess notation).
+ * *replaced* means that each piece inside it will be removed, when other piece is placed on it. this grid sets this flag for all it's shildren.
 
 {{{
-<line range_x="1~8" range_y="2" line="white_pawn*8"/>
+ <line range_x="1~8" range_y="2" line="white_pawn*8"/>
 }}}
 
-*line* is a macro for placing a line of pieces. "range_x" and "range_y" are ranges of coordinates - single number for all, or two -  for first and last piece, with ~ between.
-As you see, they use grid coordinates, inside of screen coordinates, because they are inside of grid.
+ * "line" is a macro for placing a line of pieces. "range_x" and "range_y" are ranges of coordinates - single number for all, or two -  for first and last piece, with ~ between. As you see, they use grid coordinates, inside of screen coordinates, because they are inside of grid.
 
-*line* attribute is a sequence of pieces in a Range form - same as in deck.
+ * *line* attribute is a sequence of pieces in a Range form - same as in deck.
+
+And about that "Range" format in lines and decks;
+
+It is a little complicated, but basically it's names of pieces, delimited by ";".
+If you have a sequence of equivalent elements, then you can write them as "name*number"
+Also, you can place a sequence of elements in alphabetic order, in format of "first_element~last_element". For example, this is a list of 52 playing cards, aces high, followed by two jokers: "02c~13s;01c~01s;j*2".
+
 
 And... That's all for chess.
 
