@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<props id="chess">
+	<picture name="chess_board" file="raw:chessboard" width="320" height="320"/>	
+	
+	<picture name="white" file="raw:dr_white" anchor_x="22" anchor_y="22"/>
+	<picture name="white2" file="raw:dr_white2" anchor_x="22" anchor_y="22"/>
+	<picture name="black" file="raw:dr_black" anchor_x="22" anchor_y="22"/>
+	<picture name="black2" file="raw:dr_black" anchor_x="22" anchor_y="22"/>
+	
+	<position name="draughts_initial">
+		
+		<deck name="all_types" x="72" y="330" presentation="line" 
+			cards="white;white2;black;black2" 
+			static="true" child_copied="true" child_hole="true" hole="true"
+			child_width="44" child_height="44"
+		/>
+		
+		<copy of="chess_board" static="true" z="-1"/>
+		<grid name="chessboard_grid" 
+			x="-20" y="-20" 
+			d_x="40,0,0" d_y="0,40,0" 
+			width="320" height="320"
+			anchor_x="-20" anchor_y="-20"
+			child_replaced="true"
+			static="true"
+		>
+			<line range_x="2~8" range_y="8"
+				line="black*4"/>
+			<line range_x="1~7" range_y="7"
+				line="black*4"/>
+			<line range_x="2~8" range_y="6"
+				line="black*4"/>
+			<line range_x="1~7" range_y="3"
+				line="white*4"/>
+			<line range_x="2~8" range_y="2"
+				line="white*4"/>
+			<line range_x="1~7" range_y="1"
+				line="white*4"/>
+		</grid>
+	</position>
+</props>

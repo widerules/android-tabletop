@@ -13,6 +13,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -36,16 +38,26 @@ public class Manager extends Accessory {
 	boolean logging = false;
 	boolean externalTransaction = false;
 
-	private PartyListener listener;
+	private PartyListener listener, deaf_listener;
+	
+	public void listenerOff(){
+		deaf_listener = listener;
+		listener = null;
+	}
+
+	public void listenerOn(){
+		listener = deaf_listener;
+		deaf_listener = null;
+	}
 
 	long nameId(String name){
 		Long n = nameIds.get(name);
 		if(n==null)
 		{
 			long _id = Accessory.indCount++;
-			nameIds.put(name, _id);
 			if(listener!=null)
 			{
+				nameIds.put(name, _id);
 				_begin();
 				listener.write(_id, name);
 				listener.link(PartyConstants.NAME, _id);
@@ -197,7 +209,11 @@ public class Manager extends Accessory {
 				listener.delete(attr._id);
 			} else {
 				if(oldValue == null)
+				{
+					listener.link(child._id(), attr._id);
 					listener.link(nameId(attr.name), attr._id);
+					listener.link(PartyConstants.ATTRIBUTE, attr._id);
+				}
 				listener.write(attr._id, newValue);
 			}
 			_end();
@@ -224,10 +240,9 @@ public class Manager extends Accessory {
 		} else {
 			if (listener != null) {
 				_begin();
-				if (from != null && from.manager() == this)
-					listener.link(to._id(), child._id());
-				else {
-					listener.write(child._id(), child.name());
+				listener.link(to._id(), child._id());
+				if (from == null || from.manager() != this){
+					listener.write(child._id(), child.getClass().getSimpleName());
 					listener.link(PartyConstants.ACCESSORY, child._id());
 					if(child.attrs() != null){
 						for (Attr a : child.attrs().values()) {						
@@ -267,6 +282,72 @@ public class Manager extends Accessory {
 	void end(){
 		externalTransaction = false;
 		_end();
+	}
+	
+	public Accessory parseDb(SQLiteDatabase db){
+		Accessory root = null;
+		
+		TreeMap<Long, Accessory> as = new TreeMap<Long, Accessory>();
+		Cursor cursor;
+		cursor = db.rawQuery("select acc_id, acc_name, sup_id from accessories", null);		
+		while(cursor.next()){
+			String className = cursor.getString(1);
+			try{
+				Accessory a;
+				if(className.equals("Deck"))
+					a = new Deck();
+				else if (className.equals("Grid"))
+					a = new Grid();
+				else if (className.equals("Visible"))
+					a = new Visible();
+				else if (className.equals("Picture"))
+					a = new Picture();
+				else 
+					a = new Accessory();
+								
+				a.setId(cursor.getLong(0));
+				as.put(a._id(), a);
+				
+			} catch (Exception e){
+				e.printStackTrace();
+				return null;
+			}
+		}
+		cursor.moveTo(-1);
+		while(cursor.next()){
+			long supId = cursor.getLong(2);
+			Accessory sup = as.get(supId);
+			long accid = cursor.getLong(0);
+			Accessory acc = as.get(accid);
+			if(sup == null)
+				root = acc;
+			else
+				acc.setSup(sup);
+		}
+		cursor.close();
+		
+		cursor = db.rawQuery("select attr_id, attr_name, attr_value, acc_id from attributes", null);
+		while(cursor.next())
+		{
+			Attr attr = new Attr(cursor.getLong(0), cursor.getString(1), cursor.getString(2));
+			long accid = cursor.getLong(3);
+			Accessory acc = as.get(accid);
+			acc.addAttribute(attr);
+		}
+		cursor.close();
+		
+		for(Accessory a:as.values())
+		{
+			Accessory sup = a.sup();
+			a.setSup(null);
+			a.interpretId();
+			a.into(sup);
+		}
+	
+		/*for(Accessory a:as.values()){
+			Log.i(TAG, a.toString());
+		}*/
+		return root;
 	}
 
 }

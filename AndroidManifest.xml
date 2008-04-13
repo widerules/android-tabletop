@@ -12,7 +12,7 @@
             </intent-filter>
         </activity>-->
         
-        <activity android:name=".TabletopMain" android:label="Cards">
+        <activity android:name=".TabletopMain" android:label="Tabletop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="com.baturinsky.tabletop.VIEW" />

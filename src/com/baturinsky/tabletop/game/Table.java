@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 
 import com.baturinsky.tabletop.service.DbListener;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 import android.util.Log;
 
@@ -28,87 +30,105 @@ public class Table extends View {
 	private Canvas mCanvas;
 
 	private Visible selected = null;
-	private Visible game = null;	
+	private Visible game = null;
 	private Manager manager;
-	
-	final static String root = "/data/data/com.baturinsky.tabletop/databases/"; 
-	
+
+	final static String root = "/data/data/com.baturinsky.tabletop/databases/";
+
 	SQLiteDatabase db = null;
-	
-	public Table(Context cx) {
+
+	private Activity activity;
+
+	public Table(Activity cx) {
 		super(cx);
+		activity = cx;
+		activity.requestWindowFeature(Window.FEATURE_PROGRESS);
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
 		mPaint.setColor(Color.BLACK);
 
 		selected = null;
 
-		manager = new Manager(getContext(), "manager");
-		manager.logging = false;
-		
-		//manager.setPartyListener(new PartyListenerLog());
-		load(root + "d.db", "raw:chess#initial");
 	}
-	
-	void load(String dbName, String init){
+
+	public void load(String dbName, String init) {
+
+		manager = new Manager(getContext(), "manager");
+
+		// Toast.makeText(getContext(), "Loading game. This is not very
+		// optimised yet, so can take some time", Toast.LENGTH_SHORT).show();
 		closeDb();
-		if(dbName == null)
+		if (dbName == null)
 			dbName = lastUri();
 		saveLastUri(dbName);
-		
-		if(init != null){
+
+		if (init != null) {
 			String[] suri = init.split("#");
-			if(suri.length == 2)
-			{
-				
+			if (suri.length == 2) {
+				// File file = new File(dbName);
 				Accessory pack = manager.parseFile(suri[0]);
 				Visible position = (Visible) pack.locate(suri[1]);
-				
-				manager.logging = false;				
-				
-				try{
-					
-					openDb(dbName, true);					
+
+				manager.logging = false;
+
+				try {
+					openDb(dbName, true);
 					manager.begin();
-					game = (Visible)position.copyTo(manager);
+					game = (Visible) position.copyTo(manager);
 					game.interpretModel();
 					manager.end();
-				} catch (Exception e){
+					game.calculateCtm();
+					redrawTable();
+				} catch (Exception e) {
 					Log.e(TAG, Log.getStackTraceString(e));
-					AlertDialog.show(getContext(),"Database error", 0, e.toString(), "", false);
+					AlertDialog.show(getContext(), "Database error", 0, e
+							.toString(), "", false);
 					game = null;
 				}
 			}
 		} else {
 			openDb(dbName, false);
+			game = (Visible) manager.parseDb(db);
+			if (game == null) {
+				if (init == null)
+					load(null, "raw:chess#initial");
+				return;
+			}
+			manager.listenerOff();
+			game.into(manager);
+			manager.listenerOn();
+			game.interpretModel();
+			game.calculateCtm();
 		}
+		redrawTable();
 	}
-	
-	void openDb(String uri, boolean overwrite){
+
+	void openDb(String uri, boolean overwrite) {
 		closeDb();
-		File file = new File(uri);
-		if(file.exists() && !overwrite)
+		File file = new File(root + uri);
+		if (file.exists() && !overwrite)
 			db = SQLiteDatabase.open(file, null);
-		else
-		{
+		else {
 			initDb(file);
 		}
-		
-		try{
-			manager.setPartyListener(new DbListener(db));
-		} catch (Exception e) {
-			Log.e(TAG, Log.getStackTraceString(e));
-			initDb(file); //If file exists, but not initialized properly
-			manager.setPartyListener(new DbListener(db));
-		}
+
+		manager.setPartyListener(new DbListener(db));
+
+		/*
+		 * try{ manager.setPartyListener(new DbListener(db)); } catch (Exception
+		 * e) { Log.e(TAG, Log.getStackTraceString(e)); initDb(file); //If file
+		 * exists, but not initialized properly manager.setPartyListener(new
+		 * DbListener(db)); }
+		 */
 	}
-	
-	void initDb(File file){
-		if(file.exists()){
+
+	void initDb(File file) {
+		if (file.exists()) {
 			file.delete();
 		}
 
 		db = SQLiteDatabase.create(file, 1, null);
+		assert db != null : "Failed to create db at " + file;
 		String dbinit;
 		try {
 			dbinit = Manager.readString(getContext(), "raw:dbinit");
@@ -116,18 +136,18 @@ public class Table extends View {
 			Log.e(TAG, Log.getStackTraceString(e));
 			return;
 		}
-		for(String s:dbinit.split(";\\r?\\n")){
+		for (String s : dbinit.split(";\\r?\\n")) {
 			s = s + ";";
 			Log.i(TAG, "Init SQL line:" + s);
-			db.execSQL(s );
+			db.execSQL(s);
 		}
 	}
-	
-	void closeDb(){
-		if(db!=null)
-		{
+
+	void closeDb() {
+		if (db != null) {
 			db.close();
 			db = null;
+			manager.setPartyListener(null);
 		}
 	}
 
@@ -196,25 +216,30 @@ public class Table extends View {
 		return true;
 	}
 
-	String lastUri(){
+	String lastUri() {
 		try {
 			return Manager.readString(getContext(), LAST_URI);
 		} catch (Exception e) {
 			Log.e(TAG, Log.getStackTraceString(e));
-			Toast.makeText(getContext(), "Can't recall last opened party - opening default", Toast.LENGTH_SHORT).show();
-			return "/data/data/com.baturinsky.tabletop/databases/newgame.db";
+			Toast.makeText(getContext(),
+					"Can't recall last opened party - opening default",
+					Toast.LENGTH_SHORT).show();
+			return root + "newgame.db";
 		}
 	}
-	
-	void saveLastUri(String uri){
+
+	void saveLastUri(String uri) {
 		try {
-			FileOutputStream stream = getContext().openFileOutput(LAST_URI, Context.MODE_PRIVATE);
+			FileOutputStream stream = getContext().openFileOutput(LAST_URI,
+					Context.MODE_PRIVATE);
 			stream.write(uri.getBytes());
 			stream.close();
 		} catch (Exception e) {
 			Log.e(TAG, Log.getStackTraceString(e));
 			e.printStackTrace();
-			Toast.makeText(getContext(), "Failed to remember last opened party", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(),
+					"Failed to remember last opened party", Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 }

@@ -199,7 +199,10 @@ public class Deck extends Visible {
 			inv.mapPoints(b);
 			int ind = (int)((b[X]+border) / w);
 			calculateCtm();
-			return visibles().get(ind);
+			if(visibles().size()<=ind)
+				return this;
+			else
+				return visibles().get(ind);
 		}
 		return this;
 	}

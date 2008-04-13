@@ -15,12 +15,28 @@ CREATE UNIQUE INDEX [links_sub_sup] ON [links](
 
 CREATE INDEX notes_value on notes (value);
 
+CREATE INDEX notes_id on notes (_id);
+
 CREATE VIEW subs AS SELECT sub, value, sup FROM notes INNER JOIN links ON sub=notes._id;
 
-CREATE VIEW names AS SELECT sub AS _id, value AS name FROM subs WHERE sup=-2;
+CREATE VIEW names AS SELECT subs.sub AS name_id, subs.value AS name FROM subs WHERE sup=-2;
+
+CREATE VIEW [sub_subs] AS 
+SELECT DISTINCT sub_sub.sub As sub, sub_sub.sup AS sup, sup_sub.sup AS sup_sup
+FROM subs as sub_sub INNER JOIN subs AS sup_sub ON sup_sub.sub = sub_sub.sup;
 
 CREATE VIEW [named] AS
-SELECT sub AS _id, name as name, value as value FROM subs INNER JOIN names WHERE names._id = sup;
+SELECT subs.sub AS named_id, names.name as name, subs.value as value FROM subs INNER JOIN names WHERE name_id = sup;
+
+CREATE VIEW [accessories] AS 
+SELECT subs.sub AS acc_id, subs.value AS acc_name, sub_subs.sup AS sup_id FROM subs
+LEFT OUTER JOIN sub_subs on sub_subs.sub = subs.sub AND sub_subs.sup_sup = -7
+WHERE subs.sup = -7;
+
+CREATE VIEW [attributes] AS 
+SELECT named_id AS attr_id, name AS attr_name, named.value AS attr_value, sub_subs.sup AS acc_id FROM named
+INNER JOIN links ON links.sub = named_id AND links.sup = -6
+INNER JOIN sub_subs ON sub_subs.sub = named_id AND sub_subs.sup_sup = -7;
 
 CREATE TRIGGER [insert_named]
 INSTEAD OF INSERT ON [named]
@@ -30,10 +46,10 @@ BEGIN
 INSERT INTO names (name) SELECT new.name AS name;  
 
 INSERT OR REPLACE INTO notes
-VALUES((SELECT _id FROM named WHERE name = new.name), new.value);   
+VALUES((SELECT named_id FROM named WHERE name = new.name), new.value);   
 
 INSERT OR IGNORE INTO links (sup, sub) VALUES (
-(SELECT _id FROM names WHERE name = new.name), last_insert_rowid());   
+(SELECT name_id FROM names WHERE name = new.name), last_insert_rowid());   
 
 END;
 
@@ -47,8 +63,8 @@ WHERE (SELECT COUNT(*) FROM names where name=new.name) = 0;
 
 INSERT OR IGNORE INTO links (sup, sub) SELECT -2 AS sup, last_insert_rowid() AS sub; 
 
-INSERT INTO notes VALUES (100000000000, ""); 
-
 END;
+
+INSERT INTO notes VALUES (100000000000, "");
 
 END;

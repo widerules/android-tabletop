@@ -21,16 +21,12 @@ public class DbListener implements PartyListener {
 		
 	@Override
 	public void delete(long id) {
-		if(!transactionOpened)
-			begin();
 		sqlDelete.bindLong(1, id);
 		sqlDelete.execute();
 	}
 
 	@Override
 	public void link(long sup, long sub) {
-		if(!transactionOpened)
-			begin();
 		sqlLink.bindLong(1, sup);
 		sqlLink.bindLong(2, sub);
 		sqlLink.execute();
@@ -38,8 +34,6 @@ public class DbListener implements PartyListener {
 
 	@Override
 	public void unlink(long sup, long sub) {
-		if(!transactionOpened)
-			begin();
 		sqlUnlink.bindLong(1, sup);
 		sqlUnlink.bindLong(2, sub);
 		sqlUnlink.execute();
@@ -47,8 +41,6 @@ public class DbListener implements PartyListener {
 
 	@Override
 	public void write(long id, String val) {
-		if(!transactionOpened)
-			begin();
 		sqlWrite.bindLong(1, id);
 		sqlWrite.bindString(2, val==null?"":val);
 		sqlWrite.execute();
@@ -57,12 +49,13 @@ public class DbListener implements PartyListener {
 
 	@Override
 	public void begin(long time) {
-		transactionOpened = true;
-		db.execSQL("BEGIN");
+		if(!transactionOpened)
+			db.execSQL("BEGIN");
+		transactionOpened = true;		
 	}
 
 	public void begin() {
-		begin(new Date().getTime());
+		begin(new Date().getTime());		
 	}
 
 	@Override
