@@ -64,12 +64,17 @@ final static int SYSTEM = -1, NAME = -2, OPTION = -3, USER = -4,
 VISIBILITY = -5, ATTRIBUTE = -6, ACCESSORY = -7, ROOT = -8;
 }}}
 
-They are used to mark a role of note. If some note is linked from one of this negative pseudo-notes, then it means that it is one of the kind that is marked with this note.
+They are used to mark a "type" of note. If some note is linked from one of this negative pseudo-notes, then it means that it has type that is marked with this note.
 
  * NAME - notes, that are names of other notes. It is used mainly for names of attributes - even if there are hundreds of attributes with name "width" in game, they all are linked from one note, linked from NAME.
 
  * ATTRIBUTE - notes, that are values of attributes.
  * ACCESSORY - notes, that represent accessories. They have a value, equal to it's type (picture, grid, deck, etc.). More important, all of it's attributes are linked from it.
+
+Accessory note is linked from it's parent note and ACCESSORY pseudo-note. It is linked to all it's attributes and child accessories.
+
+Attribute note is linked from it's parent accessory, name note, and ATTRIBUTE note.
+
 
  * ROOT - root accessory of game
  * OPTION, SYSTEM - notes, that are not directly relevant to game state, but hold some utility information
