@@ -1,7 +1,7 @@
 #summary Description and examples of game template format
-= Introduction =
 
-Let's describe it on an example of chess board:
+==Example==
+Let's start with example of chess board:
 
 {{{
 
@@ -40,6 +40,8 @@ Let's describe it on an example of chess board:
 </props>
 
 }}}
+
+==Syntax==
 
 {{{
 <picture name="chess_board" file="raw:chessboard" width="320" height="320" aa="false"/>
@@ -107,15 +109,23 @@ Let's describe it on an example of chess board:
 
  * *line* attribute is a sequence of pieces in a Range form - same as in deck.
 
+==Range==
+
 And about that "Range" format in lines and decks;
 
 It is a little complicated, but basically it's names of pieces, delimited by ";".
 If you have a sequence of equivalent elements, then you can write them as "name*number"
 Also, you can place a sequence of elements in alphabetic order, in format of "first_element~last_element". For example, this is a list of 52 playing cards, aces high, followed by two jokers: "02c~13s;01c~01s;j*2".
 
+==Name lookup==
+Element can reference to it's child, or child of any of it's parents by just name.
+It can reference other elements in a form of path, starting from child of it or it's parent, delimited by dots.
 
-And... That's all for chess.
+For example: "initial.chessboard_grid" - for elements not inside "initial" element, or just "chessboard_grid" for elements inside "initial".
 
+In case of several item's parent having same named child, then child of lower parent has priority. If some element has children wih same name, then first can be referenced by name, second as "name#2", third as "name#3", etc.
+
+==Draughts==
 Now you will understand a config file for draughts too:
 
 {{{
