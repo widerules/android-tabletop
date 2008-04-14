@@ -79,3 +79,5 @@ They are used to mark a role of note. If some note is linked from one of this ne
 If some note or link is changed by some user on his instance of game state, then it should broadcast Update (see PartyListener) to all other users, containing this change.
 
  * VISIBILITY - visibility class. If some note is linked from visibility note, than it should be seen only by users, that is linked to same visibility note. All other users doesn't receive information about changes of this note, and link from or to this note.
+
+DbPresentation reflects some ideas of this model, so you can see it as well.
