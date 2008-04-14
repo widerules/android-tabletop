@@ -13,21 +13,21 @@
 		/>
 		<copy of="chess_board" static="true" z="-1"/>
 		<grid name="chessboard_grid" 
-			x="-20" y="300" 
-			d_x="40,0,0" d_y="0,-40,0" 
+			x="-20" y="-20" 
+			d_x="40,0,0" d_y="0,40,0" 
 			width="320" height="320"
 			anchor_x="-20" anchor_y="-20"
 			child_replaced="true"
 			static="true"
 		>
 			<line range_x="1~8" range_y="1"
-				line="white_rook;white_knight;white_bishop;white_queen;white_king;white_bishop;white_knight;white_rook"/>
-			<line range_x="1~8" range_y="2"
-				line="white_pawn*8"/>
-			<line range_x="1~8" range_y="7"
 				line="black_rook;black_knight;black_bishop;black_queen;black_king;black_bishop;black_knight;black_rook"/>
-			<line range_x="1~8" range_y="8"
+			<line range_x="1~8" range_y="2"
 				line="black_pawn*8"/>
+			<line range_x="1~8" range_y="7"
+				line="white_pawn*8"/>
+			<line range_x="1~8" range_y="8"
+				line="white_rook;white_knight;white_bishop;white_queen;white_king;white_bishop;white_knight;white_rook"/>
 		</grid>
 	</position>
 </props>
