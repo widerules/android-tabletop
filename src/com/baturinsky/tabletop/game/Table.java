@@ -33,7 +33,7 @@ public class Table extends View {
 	private Visible game = null;
 	private Manager manager;
 
-	final static String root = "/data/data/com.baturinsky.tabletop/databases/";
+	final static String root = "/data/data/com.baturinsky.tabletop/";
 
 	SQLiteDatabase db = null;
 
@@ -224,7 +224,7 @@ public class Table extends View {
 			Toast.makeText(getContext(),
 					"Can't recall last opened party - opening default",
 					Toast.LENGTH_SHORT).show();
-			return root + "newgame.db";
+			return "newgame.db";
 		}
 	}
 

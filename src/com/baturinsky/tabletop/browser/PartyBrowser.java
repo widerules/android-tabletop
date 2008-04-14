@@ -68,7 +68,7 @@ public class PartyBrowser extends Activity {
         }
     	setTitle(table + ":" + cursor.count() + " fields");
 
-        setContentView(R.layout.browser);
+        //setContentView(R.layout.browser);
 		names = cursor.getColumnNames();
 		list = (ListView)findViewById(R.id.list);
 		ListAdapter ca = new BaseAdapter(){

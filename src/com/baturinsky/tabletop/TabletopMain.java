@@ -27,7 +27,7 @@ public class TabletopMain extends Activity {
 		setContentView(table);
 		// table.load("x.db", "raw:chess#initial");
 		// table.load(null, "raw:chess#initial");
-		table.load(null, null);
+		table.load("newgame.db", null);
 	}
 
 	@Override
