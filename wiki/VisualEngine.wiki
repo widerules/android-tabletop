@@ -12,6 +12,6 @@ Means to made game moved more automated (highlighting correct moves, preventing 
 
 Also, following Gui features are planned:
 
-# Making moves with keyboard only
-# Scaling and scrolling game field for big tables
-# More game widgets - fully functional card sets, dices, notes (for word games, for example)
+ # Making moves with keyboard only
+ # Scaling and scrolling game field for big tables
+ # More game widgets - fully functional card sets, dices, notes (for word games, for example)
