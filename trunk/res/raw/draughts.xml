@@ -5,7 +5,7 @@
 	<picture name="white" file="raw:dr_white" anchor_x="22" anchor_y="22"/>
 	<picture name="white2" file="raw:dr_white2" anchor_x="22" anchor_y="22"/>
 	<picture name="black" file="raw:dr_black" anchor_x="22" anchor_y="22"/>
-	<picture name="black2" file="raw:dr_black" anchor_x="22" anchor_y="22"/>
+	<picture name="black2" file="raw:dr_black2" anchor_x="22" anchor_y="22"/>
 	
 	<position name="draughts_initial">
 		
@@ -17,25 +17,25 @@
 		
 		<copy of="chess_board" static="true" z="-1"/>
 		<grid name="chessboard_grid" 
-			x="-20" y="300" 
-			d_x="40,0,0" d_y="0,-40,0" 
+			x="-20" y="-20" 
+			d_x="40,0,0" d_y="0,40,0" 
 			width="320" height="320"
 			anchor_x="-20" anchor_y="-20"
 			child_replaced="true"
 			static="true"
 		>
-			<line range_x="2~8" range_y="8"
+			<line range_x="2~8" range_y="1"
 				line="black*4"/>
-			<line range_x="1~7" range_y="6"
+			<line range_x="1~7" range_y="2"
 				line="black*4"/>
-			<line range_x="2~8" range_y="7"
+			<line range_x="2~8" range_y="3"
 				line="black*4"/>
 
-			<line range_x="1~7" range_y="3"
+			<line range_x="1~7" range_y="6"
 				line="white*4"/>
-			<line range_x="2~8" range_y="2"
+			<line range_x="2~8" range_y="7"
 				line="white*4"/>
-			<line range_x="1~7" range_y="1"
+			<line range_x="1~7" range_y="8"
 				line="white*4"/>
 
 		</grid>

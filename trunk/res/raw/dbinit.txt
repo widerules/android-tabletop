@@ -22,7 +22,7 @@ CREATE VIEW subs AS SELECT sub, value, sup FROM notes INNER JOIN links ON sub=no
 CREATE VIEW names AS SELECT subs.sub AS name_id, subs.value AS name FROM subs WHERE sup=-2;
 
 CREATE VIEW [sub_subs] AS 
-SELECT DISTINCT sub_sub.sub As sub, sub_sub.sup AS sup, sup_sub.sup AS sup_sup
+SELECT DISTINCT sub_sub.sub AS sub, sub_sub.sup AS sup, sup_sub.sup AS sup_sup
 FROM subs as sub_sub INNER JOIN subs AS sup_sub ON sup_sub.sub = sub_sub.sup;
 
 CREATE VIEW [named] AS
