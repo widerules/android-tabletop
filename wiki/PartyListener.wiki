@@ -2,7 +2,7 @@
 
 ==Summary=
 
-Interface {{{*com.baturinsky.tabletop.service.PartyListener*{{{ is interface, used to describe
+Interface {{{com.baturinsky.tabletop.service.PartyListener}}} is interface, used to describe
 game moves, or a whole game.
 
 http://code.google.com/p/android-tabletop/source/browse/trunk/src/com/baturinsky/tabletop/service/PartyListener.java
@@ -43,20 +43,20 @@ _void end();_ - finishes move or transaction.
 
 ==Implementations==
 
-{{{*com.baturinsky.tabletop.service.PartyListenerLog*}}}
+{{{com.baturinsky.tabletop.service.PartyListenerLog}}}
 
 http://code.google.com/p/android-tabletop/source/browse/trunk/src/com/baturinsky/tabletop/service/PartyListenerLog.java
 
 Just logs commands.
 
-{{{*com.baturinsky.tabletop.service.Update*}}}
+{{{com.baturinsky.tabletop.service.Update}}}
 
 http://code.google.com/p/android-tabletop/source/browse/trunk/src/com/baturinsky/tabletop/service/Update.java
 
 This class can store commands into a string, and then deserialize them back to commands.
 It's main use is interface between applications and sending moves to the remote client.
 
-{{{*com.baturinsky.tabletop.service.DbListener*}}}
+{{{com.baturinsky.tabletop.service.DbListener}}}
 
 http://code.google.com/p/android-tabletop/source/browse/trunk/src/com/baturinsky/tabletop/service/DbListener.java
 
