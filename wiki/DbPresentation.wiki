@@ -6,10 +6,10 @@ This is an init file for sqlite db, used for storing game on disk.
 BEGIN;
 }}}
 
+{{{
 CREATE TABLE links (_id INTEGER PRIMARY KEY, sup INTEGER, sub INTEGER);
 
 CREATE TABLE notes (_id INTEGER PRIMARY KEY, value STRING);
-
 }}}
 
 Two only "real" tables.
