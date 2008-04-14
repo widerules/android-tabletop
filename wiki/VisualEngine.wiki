@@ -2,4 +2,4 @@
 
 Visual Engine is built to be flexible and comfy.
 
-It can show game accessories on screen, and interpret user's action. Now primary way to do moves is moving pieces - first you click on a piece to move, and then where you want it. Depending on moved piece and target, different actions can happen - piece can be jast moved, or copied to a new place, or replace a piece it is dropped on. Rules for that are described in XmlFormat.
+It can show game accessories on screen, and interpret user's action. Now primary way to do moves is moving pieces - first you click on a piece to move, and then where you want it. Depending on moved piece and target, different actions can happen - piece can be just moved, or copied to a new place, or replace a piece it is dropped on. Rules for that are described in XmlFormat.
