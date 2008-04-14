@@ -174,9 +174,9 @@ public class Deck extends Visible {
 	}
 
 	@Override
-	boolean drop(Visible item, float[] at) {
+	boolean drop(Visible item, float[] at) {		
 		if (this != item) {
-			item.into(this).interpretModel();
+			super.drop(item, at);
 			updateImage();
 		} else {
 			return false;
