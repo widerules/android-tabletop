@@ -62,7 +62,7 @@ http://code.google.com/p/android-tabletop/source/browse/trunk/src/com/baturinsky
 
 This class alters game state, stored in a database, according to commands.
 
-If you store your move into an Update class, send resulting string to remote client, create Update instance from this string there, and then call method "apply" of this class with a DbListener as argument, then it will alter db-stored game state according to your commands.
+If you store your move into an Update class, send resulting string to remote client, create Update instance from this string there, and then call method "apply" of this class with a `DbListener` as argument, then it will alter db-stored game state according to your commands.
 
 ==Current Uses==
-In demo DbListener class is used to store gme updates to database in real time.
+In demo `DbListener` class is used to store game and game updates to database in real time.
